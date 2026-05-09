@@ -1,3 +1,4 @@
+/** Configuration module - loads environment variables */
 import dotenv from "dotenv";
 import { check } from "../utils/utils.js";
 
@@ -16,6 +17,7 @@ check("EMAIL_API", EMAIL_API);
 check("FROM_EMAIL", FROM_EMAIL);
 check('IMG_KIT_PRIV_KEY',IMG_KIT_PRIV_KEY)
 
+/** Application configuration object */
 export const config = {
   port: PORT || 3000,
   JWT_SECRET: JWT_SECRET,

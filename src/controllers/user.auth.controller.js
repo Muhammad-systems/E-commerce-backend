@@ -8,6 +8,11 @@ import jwt from "jsonwebtoken";
 import { config } from "../configs/config.js";
 import crypto from "crypto";
 
+/**
+ * Verify OTP and complete login
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ */
 export const verifyAndLogin = async (req, res) => {
   try {
     const { otp } = req.body;
@@ -89,6 +94,11 @@ export const verifyAndLogin = async (req, res) => {
   }
 };
 
+/**
+ * Register new user with email OTP verification
+ * @param {Object} req - Express request with email, password, fullname
+ * @param {Object} res - Express response
+ */
 export const register = async (req, res) => {
   let user;
   try {
@@ -162,6 +172,11 @@ export const register = async (req, res) => {
   }
 };
 
+/**
+ * Authenticate user with email and password
+ * @param {Object} req - Express request with email, password
+ * @param {Object} res - Express response
+ */
 export const login = async (req, res) => {
   try {
     const result = loginValidate.safeParse(req.body);
@@ -236,6 +251,11 @@ export const login = async (req, res) => {
   }
 };
 
+/**
+ * Logout user and revoke session
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ */
 export const logOut = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -273,6 +293,11 @@ export const logOut = async (req, res) => {
   }
 };
 
+/**
+ * Generate new access token from refresh token
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ */
 export const generateAccessToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -346,6 +371,11 @@ export const generateAccessToken = async (req, res) => {
   }
 };
 
+/**
+ * Logout from all devices
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ */
 export const logoutToAll = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;

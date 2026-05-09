@@ -1,9 +1,15 @@
-import resend from '../configs/resend.config.js'; 
-import {config }from '../configs/config.js'
+import resend from "../configs/resend.config.js";
+import { config } from "../configs/config.js";
 
 const FROM_EMAIL = config.FROM_EMAIL.trim();
 
-export const sendOTP = async (email, otp, firstname = 'User') => {
+/**
+ * @param {string} email - Recipient email
+ * @param {string} otp - One-time password
+ * @param {string} firstname - User's first name
+ * @returns {Promise<{success: boolean, id?: string}>}
+ */
+export const sendOTP = async (email, otp, firstname = "User") => {
   try {
     console.log("SENDING TO:", email);
     console.log("USING FROM:", config.FROM_EMAIL);
@@ -11,7 +17,7 @@ export const sendOTP = async (email, otp, firstname = 'User') => {
     const { data, error } = await resend.emails.send({
       from: `FieldAbuser <${FROM_EMAIL}>`,
       to: [email.trim()],
-      subject: 'Your Verification Code',
+      subject: "Your Verification Code",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
           <h2 style="color: #333;">Hello ${firstname},</h2>
@@ -28,11 +34,16 @@ export const sendOTP = async (email, otp, firstname = 'User') => {
     if (error) throw error;
     return { success: true, id: data?.id };
   } catch (err) {
-  console.log("FULL RESEND ERROR:", JSON.stringify(err, null, 2));
-  return { success: false };
+    console.log("FULL RESEND ERROR:", JSON.stringify(err, null, 2));
+    return { success: false };
   }
 };
 
+/**
+ * @param {string} email - Recipient email
+ * @param {string} firstname - User's first name
+ * @returns {Promise<{success: boolean, id?: string}>}
+ */
 export const sendWelcomeEmail = async (email, firstname) => {
   try {
     console.log("SENDING TO:", email);
@@ -40,7 +51,7 @@ export const sendWelcomeEmail = async (email, firstname) => {
     const { data, error } = await resend.emails.send({
       from: `FieldsAbuser <${FROM_EMAIL}>`,
       to: [email.trim()],
-      subject: 'Welcome to FieldAbuser!',
+      subject: "Welcome to FieldAbuser!",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
           <h1 style="color: #4F46E5;">Welcome, ${firstname}! 🎉</h1>
@@ -57,19 +68,28 @@ export const sendWelcomeEmail = async (email, firstname) => {
     if (error) throw error;
     return { success: true, id: data?.id };
   } catch (err) {
-    console.error('Welcome Email Error:', err);
+    console.error("Welcome Email Error:", err);
     return { success: false, error: err.message };
   }
 };
 
+/**
+ * @param {Object} email - Recipient email(s)
+ * @param {Object} order - Order object with items and details
+ * @returns {Promise<{success: boolean, id?: string}>}
+ */
 export const sendOrderConfirmation = async (email, order) => {
-  const itemsList = order.items.map(item => `
+  const itemsList = order.items
+    .map(
+      (item) => `
     <tr>
       <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">Rs ${item.price}</td>
     </tr>
-  `).join('');
+  `,
+    )
+    .join("");
 
   try {
     const { data, error } = await resend.emails.send({
@@ -104,17 +124,23 @@ export const sendOrderConfirmation = async (email, order) => {
     if (error) throw error;
     return { success: true, id: data?.id };
   } catch (err) {
-    console.error('Order Email Error:', err);
+    console.error("Order Email Error:", err);
     return { success: false, error: err.message };
   }
 };
 
+/**
+ * @param {string} email - Recipient email
+ * @param {string} resetLink - Password reset link
+ * @param {string} firstname - User's first name
+ * @returns {Promise<{success: boolean, id?: string}>}
+ */
 export const sendPasswordReset = async (email, resetLink, firstname) => {
   try {
     const { data, error } = await resend.emails.send({
       from: `YourApp <${FROM_EMAIL}>`,
       to: email,
-      subject: 'Password Reset Request',
+      subject: "Password Reset Request",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
           <h2 style="color: #333;">Hello ${firstname},</h2>
@@ -134,8 +160,7 @@ export const sendPasswordReset = async (email, resetLink, firstname) => {
     if (error) throw error;
     return { success: true, id: data?.id };
   } catch (err) {
-    console.error('Reset Email Error:', err);
+    console.error("Reset Email Error:", err);
     return { success: false, error: err.message };
   }
 };
-

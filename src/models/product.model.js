@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { string } from "zod";
 
+/** Product schema - stores product information and inventory */
 const productSchema = mongoose.Schema(
   {
     title: {
@@ -28,16 +29,16 @@ const productSchema = mongoose.Schema(
       default: 0,
     },
     images: [
-      {url:{
-        type: String,
-        required: true,
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        fileId: {
+          type: String,
+          required: true,
+        },
       },
-      fileId:{
-        type:String,
-        required:true,
-      }
-    }
-
     ],
   },
   { timestamps: true },

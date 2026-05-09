@@ -1,7 +1,12 @@
 import { productModel } from "../models/product.model.js";
 import { createProductValidate } from "../validations/validation.js";
-import { uploadFile,deleteFile } from "../services/storage.service.js";
+import { uploadFile, deleteFile } from "../services/storage.service.js";
 
+/**
+ * Create new product with images
+ * @param {Object} req - Express request with product data and images
+ * @param {Object} res - Express response
+ */
 export const createProduct = async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -29,9 +34,8 @@ export const createProduct = async (req, res) => {
     for (const file of req.files) {
       const base64File = file.buffer.toString("base64");
       const response = await uploadFile(base64File, file.originalname);
-      console.log("ImageKit Response Check:", response.fileId)
-      imgeUrls.push({url:response.url,
-                    fileId:response.fileId});
+      console.log("ImageKit Response Check:", response.fileId);
+      imgeUrls.push({ url: response.url, fileId: response.fileId });
     }
     const product = await productModel.create({
       title,
@@ -55,6 +59,11 @@ export const createProduct = async (req, res) => {
   }
 };
 
+/**
+ * Get all products with pagination
+ * @param {Object} req - Express request with page query
+ * @param {Object} res - Express response
+ */
 export const getAllProduct = async (req, res) => {
   try {
     const page = Math.max(1, Number(req.query.page) || 1);
@@ -84,6 +93,11 @@ export const getAllProduct = async (req, res) => {
   }
 };
 
+/**
+ * Update product details and images
+ * @param {Object} req - Express request with product id and update data
+ * @param {Object} res - Express response
+ */
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -108,7 +122,7 @@ export const updateProduct = async (req, res) => {
           file.buffer.toString("base64"),
           file.originalname,
         );
-        imageUrls.push({url:response.url,fileId:response.fileId});
+        imageUrls.push({ url: response.url, fileId: response.fileId });
       }
       updateData.images = imageUrls;
     }
@@ -131,6 +145,11 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+/**
+ * Delete product and its images
+ * @param {Object} req - Express request with product id
+ * @param {Object} res - Express response
+ */
 export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -147,7 +166,7 @@ export const deleteProduct = async (req, res) => {
     if (product.images && Array.isArray(product.images)) {
       for (const img of product.images) {
         if (img.fileId) {
-          await deleteFile(img.fileId); 
+          await deleteFile(img.fileId);
         }
       }
     }
@@ -158,7 +177,6 @@ export const deleteProduct = async (req, res) => {
       success: true,
       message: "Product and its images deleted successfully",
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
