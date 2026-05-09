@@ -1,0 +1,17 @@
+✅ JWT Auth (User + Admin roles)
+✅ Redis Caching (Cart, Hot Products)
+✅ Inventory Management (Stock auto-decrease, race condition handle)
+✅ Stripe Payment (Test mode + Webhooks)
+✅ Order Lifecycle (Pending → Paid → Shipped → Delivered)
+✅ Admin Analytics APIs (Revenue, Top Products, User Growth)
+✅ Advanced Search/Filter/Pagination (MongoDB Aggregation)
+✅ Image Upload (Cloudinary/AWS S3)
+✅ Rate Limiting + Input Validation (zod)
+✅ Email Notifications (Order confirmation, Welcome)
+
+
+
+------------- checklist --------------
+configs -> done
+models -> done
+userAuth -> done
